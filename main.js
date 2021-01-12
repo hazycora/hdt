@@ -10,6 +10,8 @@ function createWindow () {
   })
 
   win.loadFile('index.html')
+  win.setMenu(null)
+  win.removeMenu()
 }
 
 app.whenReady().then(createWindow)
