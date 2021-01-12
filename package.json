@@ -41,7 +41,7 @@
           "config": {
             "name": "HazyClock",
             "setupIcon": "insallicon.ico",
-            "iconUrl": "icon.ico"
+            "iconUrl": "https://raw.githubusercontent.com/hazycora/hazycora.com/main/assets/icon.ico"
           }
         },
         {
