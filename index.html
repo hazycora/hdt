@@ -1,18 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>HazyDynamicTime</title>
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-    <link rel="stylesheet" href="./style.css">
-    <script>let $ = require('jquery')</script>
+  <meta charset="UTF-8">
+  <title>HazyClock</title>
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <p>This is the first version of this app, and nothing currently functions.</p>
-    <p>
-        We are using node <script>document.write(process.versions.node)</script>,
-        Chrome <script>document.write(process.versions.chrome)</script>,
-        and Electron <script>document.write(process.versions.electron)</script>.
-    </p>
+  <div id="header">
+    <p class="option" id="option12">12hr</p><p class="option" id="option24">24hr</p><p class="option" id="option100">/100</p>
+  </div>
+  <div id="content">
+    <p id="displayTime">00:00</p>
+  </div>
+  <script>
+    let clock = {}
+    clock = { date: "", string12: "" }
+    updateTime();
+    setInterval(updateTime, 1000);
+
+    function updateTime() {
+      clock.date = new Date()
+      let hours = clock.date.getHours()
+      if (hours<10) {
+        hours = "0"+hours
+      }
+      let minutes = clock.date.getMinutes()
+      if (minutes<10) {
+        minutes = "0"+minutes
+      }
+      let seconds = clock.date.getSeconds()
+      if (seconds<10) {
+        seconds = "0"+seconds
+      }
+      clock.string12 = hours+":"+minutes+":"+seconds
+      document.getElementById("displayTime").innerHTML = clock.string12
+    }
+  </script>
 </body>
 </html>
