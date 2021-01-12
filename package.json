@@ -39,7 +39,9 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "hdt"
+            "name": "HazyClock",
+            "setupIcon": "insallicon.ico",
+            "iconUrl": "icon.ico"
           }
         },
         {
