@@ -8,13 +8,43 @@
 </head>
 <body>
   <div id="header">
-    <p class="optionRight" id="optionsMenu" onclick="closeMenu()">apply</p>
+    <p class="optionLeft" onclick="getLocation()">refresh location</p><p class="optionRight" id="optionsMenu" onclick="closeMenu()">apply</p>
   </div>
   <div id="content">
-    <p>Currently no settings.</p>
+    <p>Longitude and Latitude:</p>
+    <input id="longInput" placeholder="Longitude" type="number" step="any"></input>
+    <input id="latInput" placeholder="Latitude" type="number" step="any"></input>
+    <p>If the above is empty, your location will be approximated. Don't worry, this is handled locally and your location is not sent anywhere.</p>
+    <p>Approximation:<br>Longitude: <script>document.write(sessionStorage.approximateLong)</script>, Latitude: <script>document.write(sessionStorage.approximateLat)</script></p>
+    <p>In this current version, approximations don't work. The site https://www.maps.ie/coordinates.html can be used to find your coordinates.</p>
+    <p>Your system time and your coordinates <strong>must be in the same timezone</strong> for HDT to work.</p>
   </div>
   <script>
+    getLocation()
+
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+        document.getElementById("toggleHDT").innerHTML = "hdt failed"
+      }
+    }
+
+    function showPosition(position) {
+      sessionStorage.ApproximateLong = position.coords.longitude
+      sessionStorage.ApproximateLat = position.coords.latitude
+    }
+
+    if (localStorage.Longitude!=undefined&&localStorage.Longitude!="") {
+      document.getElementById("longInput").value = localStorage.Longitude
+    }
+    if (localStorage.Latitude!=undefined&&localStorage.Latitude!="") {
+      document.getElementById("latInput").value = localStorage.Latitude
+    }
+
     function closeMenu() {
+      localStorage.Longitude = document.getElementById("longInput").value;
+      localStorage.Latitude = document.getElementById("latInput").value;
       window.location.href = "index.html";
     }
   </script>

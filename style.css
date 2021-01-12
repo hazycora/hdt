@@ -14,7 +14,7 @@ body {
   font-family: Oswald;
   margin: 0px;
   padding: 0px;
-  line-height: 0px;
+  line-height: 1;
 }
 
 #header {
@@ -97,6 +97,27 @@ body {
   color: #aca7b8;
 }
 
+#toggleHDT {
+  float: left;
+  margin: 0px;
+  padding: 0px;
+  padding-left: 8px;
+  padding-right: 8px;
+  transition: padding-bottom 0.2s, color 0.2s;
+  user-select: none;
+}
+
+#toggleHDT:hover {
+  padding-bottom: 4px;
+  color: white;
+  background-color: #131117;
+}
+
+#toggleHDT:active {
+  padding-bottom: 2px;
+  color: #aca7b8;
+}
+
 #displayTime {
   padding: 0px;
   margin: 0px;
@@ -104,4 +125,5 @@ body {
   font-size: 50px;
   white-space: nowrap;
   user-select: none;
+  line-height: 0;
 }

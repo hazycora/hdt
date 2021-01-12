@@ -5,6 +5,7 @@
   <title>HazyClock</title>
   <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
   <link rel="stylesheet" href="./style.css">
+  <script type="text/javascript" src="suncalc.js"></script>
 </head>
 <body>
   <div id="header">
@@ -13,13 +14,16 @@
   <div id="content">
     <p id="displayTime">00:00</p>
   </div>
-  <div id="footer">hdt off</div>
+  <div id="footer">
+    <p id="toggleHDT" onclick="toggleHDT()">HDT is off</p>
+  </div>
   <script>
     let clock = {}
-    clock = { date: "", string12: "", string24: "" }
+    clock = { date: "", string12: "", string24: "", hdt: false }
     let clockFormat = "12hr"
     if (localStorage.clockFormat != undefined) {
       clockFormat = localStorage.clockFormat
+
     }
     updateTime();
     setInterval(updateTime, 40);
@@ -82,6 +86,29 @@
       document.body.removeChild(textArea);
     }
 
+    function getLocation() {
+      hdtWorking = true;
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+        document.getElementById("toggleHDT").innerHTML = "HDT failed"
+      }
+    }
+
+    function showPosition(position) {
+      sessionStorage.ApproximateLong = position.coords.longitude
+      sessionStorage.ApproximateLat = position.coords.latitude
+    }
+
+    function toggleHDT() {
+      clock.hdt = !clock.hdt
+      if(clock.hdt) {
+        document.getElementById("toggleHDT").innerHTML = "HDT is on"
+      }else{
+        document.getElementById("toggleHDT").innerHTML = "HDT is off"
+      }
+    }
+
     function setFormat(formatOption) {
       clockFormat = formatOption
       localStorage.clockFormat = formatOption
@@ -136,8 +163,33 @@
       return strTime;
     }
 
+    let hdtWorking = true;
+
     function updateTime() {
       clock.date = new Date()
+
+      if (clock.hdt&&hdtWorking) {
+        let long = "0"
+        let lat = "0"
+        if((localStorage.Longitude==undefined||localStorage.Longitude=="")&&(localStorage.Latitude==undefined||localStorage.Latitude=="")) {
+          getLocation();
+          if ((sessionStorage.ApproximateLong!=undefined&&sessionStorage.ApproximateLong!="")&&(sessionStorage.ApproximateLat!=undefined&&sessionStorage.ApproximateLat!="")) {
+            long = sessionStorage.ApproximateLong
+            lat = sessionStorage.ApproximateLat
+          }else{
+            document.getElementById("toggleHDT").innerHTML = "Input coordinates in options."
+            hdtWorking = false;
+          }
+        }else{
+          long = localStorage.Longitude
+          lat = localStorage.Latitude
+        }
+        let times = SunCalc.getTimes(new Date(), long, lat);
+        let hdtOffset = 43200000-(((times.solarNoon.getHours()*60+times.solarNoon.getMinutes()-1)*60+times.solarNoon.getSeconds())*1000)
+        clock.date = new Date(clock.date.getTime()+hdtOffset);
+
+      }
+
       clock.string24 = format24hr(clock.date)
       clock.string12 = formatAMPM(clock.date)
       clock.string100 = format100(clock.date)
