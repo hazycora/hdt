@@ -184,7 +184,7 @@
           long = localStorage.Longitude
           lat = localStorage.Latitude
         }
-        let times = SunCalc.getTimes(new Date(), long, lat);
+        let times = SunCalc.getTimes(new Date(), lat, long);
         let hdtOffset = 43200000-(((times.solarNoon.getHours()*60+times.solarNoon.getMinutes()-1)*60+times.solarNoon.getSeconds())*1000)
         clock.date = new Date(clock.date.getTime()+hdtOffset);
 
